@@ -1,0 +1,5 @@
+VERSION: 版本号
+DB_HOST: "数据库地址"
+DB_USER: "数据库用户名"
+DB_PWD: "数据库密码"
+DB_NAME: "数据库名称"
