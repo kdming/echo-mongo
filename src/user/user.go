@@ -52,7 +52,7 @@ func Login(c echo.Context) error {
 }
 
 // 根据用户名获取用户信息
-func GetUserByName(name string) models.User{
+func GetUserByName(name string) models.User {
 	user := models.User{}
 	db.FindOne("user", &user, &bson.M{"name": name}, nil)
 	return user

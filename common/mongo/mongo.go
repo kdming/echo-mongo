@@ -25,11 +25,12 @@ func Connect () bool {
 		Password: conf.DB_PWD,
 	}
 	// 链接数据库
-	GlobalMgoSession, err := mgo.DialWithInfo(info)
+	globalSession, err := mgo.DialWithInfo(info)
 	if err != nil {
 		panic(err)
 		return false
 	}
+	GlobalMgoSession = globalSession
 	GlobalMgoSession.SetMode(mgo.Monotonic, true)
 	//default is 4096
 	GlobalMgoSession.SetPoolLimit(500) // 设置session连接池最大值
