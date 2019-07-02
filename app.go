@@ -16,7 +16,6 @@ func main() {
 		e.Use(middleware.CORS())
 		e.Use(middleware.Logger())
 		e.Use(middleware.Recover())
-		
 		// 加载路由
 		router.InitRouter(e)
 		e.Logger.Fatal(e.Start(":46200"))
