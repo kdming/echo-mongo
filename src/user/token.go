@@ -24,6 +24,11 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			userId := claims["id"]
+			expDate := claims["expDate"]
+			timeNow := time.Now().Format("2006-01-02 15:04:05")
+			if (timeNow > expDate.(string)) {
+				return c.JSON(200, util.ReturnBody(1, "", "token已失效，请重新获取"))
+			}
 			if userId == "" {
 				return c.JSON(200, util.ReturnBody(1, "", "token不合法"))
 			}
@@ -42,8 +47,7 @@ func MakeToken(name string, id bson.ObjectId) string {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = name
 	claims["id"] = id.Hex()
-	claims["expDate"] = time.Now().Add(time.Hour * 1).Unix()
-	// Generate encoded token and send it as response.
+	claims["expDate"] = time.Now().Add(time.Hour * 1).Format("2006-01-02 15:04:05")
 	t, err := token.SignedString([]byte("secret"))
 	if err != nil {
 		fmt.Println(err)
