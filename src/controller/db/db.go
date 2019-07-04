@@ -2,7 +2,7 @@
 package db
 
 import (
-	db "web_model/common/mongo"
+	db "web_model/src/common/mongo"
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2"
 	"strconv"

@@ -2,9 +2,9 @@ package user
 
 import (
 	"time"
-	util "web_model/src/util"
 	models "web_model/src/model"
-	db "web_model/src/db"
+	util "web_model/src/controller/util"
+	db "web_model/src/controller/db"
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"
 )

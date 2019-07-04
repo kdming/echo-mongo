@@ -3,7 +3,7 @@ package user
 import (
 	"time"
 	"fmt"
-	util "web_model/src/util"
+	util "web_model/src/controller/util"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"

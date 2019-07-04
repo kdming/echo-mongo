@@ -1,8 +1,8 @@
 package router
 
 import (
-	user "web_model/src/user"
-	test "web_model/src/test"
+	user "web_model/src/controller/user"
+	test "web_model/src/controller/test"
 	"github.com/labstack/echo"
 )
 

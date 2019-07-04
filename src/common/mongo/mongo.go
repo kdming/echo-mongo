@@ -1,7 +1,7 @@
 package mongo
 
 import (
-	config "web_model/common/config"
+	config "web_model/src/common/config"
 	"gopkg.in/mgo.v2"
 	"time"
 	"fmt"
