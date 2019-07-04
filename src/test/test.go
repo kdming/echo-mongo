@@ -5,5 +5,6 @@ import (
 )
 
 func Test(c echo.Context) error {
-	return c.String(200, "test")
+	userId := c.Request().Header.Get("userId")
+	return c.String(200, userId)
 }

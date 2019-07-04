@@ -26,6 +26,7 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 			userId := claims["id"]
 			expDate := claims["expDate"]
 			timeNow := time.Now().Format("2006-01-02 15:04:05")
+			c.Request().Header.Set("userId", userId.(string))
 			if (timeNow > expDate.(string)) {
 				return c.JSON(200, util.ReturnBody(1, "", "token已失效，请重新获取"))
 			}
