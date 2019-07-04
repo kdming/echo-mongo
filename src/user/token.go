@@ -23,7 +23,7 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.JSON(200, util.ReturnBody(1, "", "token解析失败"))
 		}
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			userId := claims["id"]
+			userId := claims["userId"]
 			expDate := claims["expDate"]
 			timeNow := time.Now().Format("2006-01-02 15:04:05")
 			c.Request().Header.Set("userId", userId.(string))
@@ -47,7 +47,7 @@ func MakeToken(name string, id bson.ObjectId) string {
 	// Set claims
 	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = name
-	claims["id"] = id.Hex()
+	claims["userId"] = id.Hex()
 	claims["expDate"] = time.Now().Add(time.Hour * 1).Format("2006-01-02 15:04:05")
 	t, err := token.SignedString([]byte("secret"))
 	if err != nil {
