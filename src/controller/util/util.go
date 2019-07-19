@@ -1,15 +1,14 @@
 package util
 
-
 import (
-	"os"
-	"fmt"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
+	"os"
 )
 
 // 加密字符串(加盐生成md5)
-func EncryptStr(salt ,pwd string) string {
+func EncryptStr(salt, pwd string) string {
 	m5 := md5.New()
 	m5.Write([]byte(pwd))
 	m5.Write([]byte(string(salt)))
@@ -18,7 +17,7 @@ func EncryptStr(salt ,pwd string) string {
 }
 
 // 创建嵌套文件夹
-func MkdirAll(filePath string) string{
+func MkdirAll(filePath string) string {
 	exists := pathExists(filePath)
 	if exists == true {
 		return filePath
@@ -26,14 +25,14 @@ func MkdirAll(filePath string) string{
 	// 递归创建目录
 	err := os.MkdirAll(filePath, 0755)
 	if err != nil {
-		fmt.Println(err)	
+		fmt.Println(err)
 	}
 	return filePath
 }
 
 // 判断所给路径文件/文件夹是否存在
 func pathExists(path string) bool {
-	_, err := os.Stat(path)    //os.Stat获取文件信息
+	_, err := os.Stat(path) //os.Stat获取文件信息
 	if err != nil {
 		if os.IsExist(err) {
 			return true

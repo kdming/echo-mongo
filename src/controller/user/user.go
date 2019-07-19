@@ -1,12 +1,12 @@
 package user
 
 import (
-	"time"
-	models "web_model/src/model"
-	util "web_model/src/controller/util"
-	db "web_model/src/controller/db"
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"
+	"time"
+	db "web_model/src/controller/db"
+	util "web_model/src/controller/util"
+	models "web_model/src/model"
 )
 
 // 用户注册

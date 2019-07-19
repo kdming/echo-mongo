@@ -1,12 +1,12 @@
 package user
 
 import (
-	"time"
 	"fmt"
-	util "web_model/src/controller/util"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"
+	"time"
+	util "web_model/src/controller/util"
 )
 
 // 验证token
@@ -29,7 +29,7 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 			userId := claims["userId"]
 			expDate := claims["expDate"]
 			timeNow := time.Now().Format("2006-01-02 15:04:05")
-			if (timeNow > expDate.(string)) {
+			if timeNow > expDate.(string) {
 				return c.JSON(200, util.ReturnBody(1, "", "token已失效，请重新获取"))
 			}
 			if userId == "" {
@@ -40,7 +40,7 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 		} else {
 			return c.JSON(200, util.ReturnBody(1, "", "token解析失败"))
 		}
-		
+
 		return next(c)
 	}
 }

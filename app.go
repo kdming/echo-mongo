@@ -1,10 +1,10 @@
 package main
 
 import (
-	mongo "web_model/src/common/mongo"
-	router "web_model/src/common/router"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	mongo "web_model/src/common/mongo"
+	router "web_model/src/common/router"
 )
 
 func main() {

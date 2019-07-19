@@ -2,11 +2,11 @@
 package db
 
 import (
-	db "web_model/src/common/mongo"
-	"gopkg.in/mgo.v2/bson"
-	"gopkg.in/mgo.v2"
-	"strconv"
 	"fmt"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
+	"strconv"
+	db "web_model/src/common/mongo"
 )
 
 // 创建数据

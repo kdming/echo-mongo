@@ -1,19 +1,20 @@
 package mongo
 
 import (
-	config "web_model/src/common/config"
+	"fmt"
 	"gopkg.in/mgo.v2"
 	"time"
-	"fmt"
+	config "web_model/src/common/config"
 )
 
 // 全局Session管理，其他模块都从这里拿session
 var GlobalMgoSession *mgo.Session
+
 // 数据库名称
 var DataBase string
 
 // 连接数据库
-func Connect () bool {
+func Connect() bool {
 	// 读取配置文件，初始化mongo链接配置信息
 	conf := config.GetConfig()
 	DataBase = conf.DB_NAME
@@ -39,7 +40,7 @@ func Connect () bool {
 }
 
 // 获取session
-func GetSession (collection string) (*mgo.Session, *mgo.Collection) {
+func GetSession(collection string) (*mgo.Session, *mgo.Collection) {
 	s := GlobalMgoSession.Copy()
 	c := s.DB(DataBase).C(collection)
 	return s, c

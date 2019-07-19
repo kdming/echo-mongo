@@ -1,9 +1,9 @@
 package router
 
 import (
-	user "web_model/src/controller/user"
-	test "web_model/src/controller/test"
 	"github.com/labstack/echo"
+	test "web_model/src/controller/test"
+	user "web_model/src/controller/user"
 )
 
 func InitRouter(e *echo.Echo) {
@@ -12,11 +12,11 @@ func InitRouter(e *echo.Echo) {
 	e.POST("/user/login", user.Login)
 	// 用户注册
 	e.POST("/user/register", user.Register)
-	
+
 	// 路由分组
 	api := e.Group("/api")
 	// 开启token验证
-	api.Use(user.ValidateToken);
+	api.Use(user.ValidateToken)
 	// 测试方法
 	api.GET("/test", test.Test)
 
