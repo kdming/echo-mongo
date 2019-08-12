@@ -11,19 +11,18 @@ import (
 
 // 用户注册
 func Register(c echo.Context) error {
-	// 获取注册参数
-	name := c.FormValue("name")
-	password := c.FormValue("password")
+	form := new(models.User)
+	c.Bind(form);
 	// 判断用户名是否重复
-	user := GetUserByName(name)
+	user := GetUserByName(form.Name)
 	if user.Name != "" {
 		return c.JSON(200, util.ReturnBody(1, "", "用户名已存在，请换个名称重试！"))
 	}
 	// 密码加密
 	salt := time.Now().String()
-	encryptPwd := util.EncryptStr(salt, password)
+	encryptPwd := util.EncryptStr(salt, form.Password)
 	// 新增用户
-	err := db.Create("user", models.User{"", name, encryptPwd, salt})
+	err := db.Create("user", models.User{"", form.Name, encryptPwd, salt})
 	if err != nil {
 		panic(err)
 		return c.JSON(200, util.ReturnBody(1, "", "注册失败，发生异常！"))
@@ -33,18 +32,18 @@ func Register(c echo.Context) error {
 
 // 用户登录
 func Login(c echo.Context) error {
-	// 获取参数
-	name := c.FormValue("name")
-	password := c.FormValue("password")
+	// 绑定数据
+	form := new(models.User)
+	c.Bind(form);
 	// 判断用户名是否存在
-	user := GetUserByName(name)
+	user := GetUserByName(form.Name)
 	if user.Name == "" {
 		return c.JSON(200, util.ReturnBody(1, "", "用户不存在！"))
 	}
 	// 判断密码是否一致
-	encryptPwd := util.EncryptStr(user.Salt, password)
+	encryptPwd := util.EncryptStr(user.Salt, form.Password)
 	if encryptPwd == user.Password {
-		token := MakeToken(name, user.Id)
+		token := MakeToken(form.Name, user.Id)
 		return c.JSON(200, util.ReturnBody(0, token, "登录成功"))
 	} else {
 		return c.JSON(200, util.ReturnBody(1, "", "登录失败,密码错误！"))
