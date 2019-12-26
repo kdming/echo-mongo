@@ -1,10 +1,11 @@
-package mongo
+package dao
 
 import (
 	"fmt"
-	"gopkg.in/mgo.v2"
 	"time"
-	config "web_model/src/common/config"
+	"web_model/config"
+
+	"gopkg.in/mgo.v2"
 )
 
 // 全局Session管理，其他模块都从这里拿session
@@ -18,13 +19,24 @@ func Connect() bool {
 	// 读取配置文件，初始化mongo链接配置信息
 	conf := config.GetConfig()
 	DataBase = conf.DB_NAME
-	info := &mgo.DialInfo{
-		Addrs:    []string{conf.DB_HOST},
-		Timeout:  60 * time.Second,
-		Database: conf.DB_NAME,
-		Username: conf.DB_USER,
-		Password: conf.DB_PWD,
+	info := &mgo.DialInfo{}
+
+	if conf.DB_PWD != "" {
+		info = &mgo.DialInfo{
+			Addrs:    []string{conf.DB_HOST},
+			Timeout:  60 * time.Second,
+			Database: conf.DB_NAME,
+			Username: conf.DB_USER,
+			Password: conf.DB_PWD,
+		}
+	} else {
+		info = &mgo.DialInfo{
+			Addrs:    []string{conf.DB_HOST},
+			Timeout:  60 * time.Second,
+			Database: conf.DB_NAME,
+		}
 	}
+
 	// 链接数据库
 	globalSession, err := mgo.DialWithInfo(info)
 	if err != nil {
@@ -34,7 +46,7 @@ func Connect() bool {
 	GlobalMgoSession = globalSession
 	GlobalMgoSession.SetMode(mgo.Monotonic, true)
 	//default is 4096
-	GlobalMgoSession.SetPoolLimit(500) // 设置session连接池最大值
+	GlobalMgoSession.SetPoolLimit(100) // 设置session连接池最大值
 	fmt.Println("数据库连接成功")
 	return true
 }

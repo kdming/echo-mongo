@@ -1,17 +1,16 @@
-// 数据库增删改查模块
-package db
+package dao
 
 import (
 	"fmt"
+	"strconv"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"strconv"
-	db "web_model/src/common/mongo"
 )
 
 // 创建数据
 func Create(collection string, item interface{}) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	err := c.Insert(item)
 	return err
@@ -19,19 +18,22 @@ func Create(collection string, item interface{}) error {
 
 // 获取一条数据
 func FindOne(collection string, object, query interface{}, extraQuery func(*mgo.Query) *mgo.Query) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	q := c.Find(query)
 	if extraQuery != nil {
 		q = extraQuery(q)
 	}
 	err := q.One(object)
+	if err == mgo.ErrNotFound {
+		return nil
+	}
 	return err
 }
 
 // 获取全部数据
 func Find(collection string, objects, query interface{}, extraQuery func(*mgo.Query) *mgo.Query) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	q := c.Find(query)
 	if extraQuery != nil {
@@ -43,7 +45,7 @@ func Find(collection string, objects, query interface{}, extraQuery func(*mgo.Qu
 
 // 更新数据
 func Update(collection string, query, updatedItem interface{}, UpdateAll bool) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	var err error
 	if UpdateAll {
@@ -56,7 +58,7 @@ func Update(collection string, query, updatedItem interface{}, UpdateAll bool) e
 
 // 删除数据
 func Delete(collection string, query interface{}, RemoveAll bool) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	var err error
 	if RemoveAll {
@@ -69,7 +71,7 @@ func Delete(collection string, query interface{}, RemoveAll bool) error {
 
 // 聚合查询一条数据
 func AggGet(collection string, object interface{}, queries ...bson.M) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	err := c.Pipe(queries).One(object)
 	return err
@@ -77,7 +79,7 @@ func AggGet(collection string, object interface{}, queries ...bson.M) error {
 
 // 聚合查询全部数据
 func AggGetAll(collection string, objects interface{}, queries ...bson.M) error {
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	err := c.Pipe(queries).All(objects)
 	return err
@@ -96,7 +98,7 @@ func FindByPage(collection string, query bson.M, page string, limit string) []bs
 		skip = (iPage - 1) * iLimit
 	}
 	// query
-	s, c := db.GetSession(collection)
+	s, c := GetSession(collection)
 	defer s.Close()
 	result := []bson.M{}
 	err := c.Find(query).Limit(iLimit).Skip(skip).All(&result)

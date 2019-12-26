@@ -1,12 +1,13 @@
-package user
+package jwt
 
 import (
 	"fmt"
-	jwt "github.com/dgrijalva/jwt-go"
+	"time"
+	"web_model/pkg/e"
+
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"
-	"time"
-	util "web_model/src/controller/util"
 )
 
 // 验证token
@@ -15,14 +16,14 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 		// 获取token字符串
 		tokenStr := c.Request().Header.Get("token")
 		if tokenStr == "" {
-			return c.JSON(200, util.ReturnBody(1, "", "token不能为空！"))
+			return c.JSON(200, e.ReturnBody(1, "", "token不能为空！"))
 		}
 		// 解密token
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil
 		})
 		if err != nil {
-			return c.JSON(200, util.ReturnBody(1, "", "token解析失败"))
+			return c.JSON(200, e.ReturnBody(1, "", "token解析失败"))
 		}
 		// 获取token内容
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
@@ -30,15 +31,15 @@ func ValidateToken(next echo.HandlerFunc) echo.HandlerFunc {
 			expDate := claims["expDate"]
 			timeNow := time.Now().Format("2006-01-02 15:04:05")
 			if timeNow > expDate.(string) {
-				return c.JSON(200, util.ReturnBody(1, "", "token已失效，请重新获取"))
+				return c.JSON(200, e.ReturnBody(1, "", "token已失效，请重新获取"))
 			}
 			if userId == "" {
-				return c.JSON(200, util.ReturnBody(1, "", "token不合法"))
+				return c.JSON(200, e.ReturnBody(1, "", "token不合法"))
 			}
 			// 将用户id放入请求头
 			c.Request().Header.Set("userId", userId.(string))
 		} else {
-			return c.JSON(200, util.ReturnBody(1, "", "token解析失败"))
+			return c.JSON(200, e.ReturnBody(1, "", "token解析失败"))
 		}
 
 		return next(c)

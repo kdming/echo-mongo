@@ -1,15 +1,17 @@
 package main
 
 import (
+	"web_model/dao"
+	"web_model/routers"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	mongo "web_model/src/common/mongo"
-	router "web_model/src/common/router"
 )
 
 func main() {
+
 	// 建立数据库连接
-	isConnect := mongo.Connect()
+	isConnect := dao.Connect()
 	if isConnect == true {
 		e := echo.New()
 		// 开启中间件
@@ -17,7 +19,7 @@ func main() {
 		e.Use(middleware.Logger())
 		e.Use(middleware.Recover())
 		// 加载路由
-		router.InitRouter(e)
+		routers.StepRouter(e)
 		e.Logger.Fatal(e.Start(":46200"))
 	}
 }
