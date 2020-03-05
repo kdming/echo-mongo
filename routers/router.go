@@ -4,7 +4,7 @@ import (
 	"web_model/middleware/jwt"
 	v1 "web_model/routers/api/v1"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func StepRouter(e *echo.Echo) {

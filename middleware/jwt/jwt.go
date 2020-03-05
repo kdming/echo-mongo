@@ -6,7 +6,7 @@ import (
 	"web_model/pkg/e"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gopkg.in/mgo.v2/bson"
 )
 

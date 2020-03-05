@@ -3,7 +3,7 @@ package v1
 import (
 	"web_model/pkg/e"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func TestAuth(c echo.Context) error {

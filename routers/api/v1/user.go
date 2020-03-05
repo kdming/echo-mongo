@@ -7,7 +7,7 @@ import (
 	"web_model/pkg/encrypt"
 	"web_model/service/user_service"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // 用户注册
